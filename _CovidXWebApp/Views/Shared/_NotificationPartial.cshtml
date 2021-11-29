@@ -1,0 +1,54 @@
+﻿@using _CovidXWebApp.Utility;
+
+@if (TempData[WCAlert.Success] != null)
+{
+	<script src="~/plugins/jquery/jquery.min.js"></script>
+	<script src="~/plugins/toastr/toastr.min.js"></script>
+	<script type="text/javascript">
+		toastr.success('@TempData[WCAlert.Success]');
+		//toaster.options.showDuration = 5000;
+	</script>
+}
+
+@if (TempData[WCAlert.Error] != null)
+{
+	<script src="~/plugins/jquery/jquery.min.js"></script>
+	<script src="~/plugins/toastr/toastr.min.js"></script>
+	<script type="text/javascript">
+		toastr.error('@TempData[WCAlert.Error]');
+		//toaster.options.showDuration = 5000;
+	</script>
+}
+
+@if (TempData[WCAlert.Info] != null)
+{
+	<script src="~/plugins/jquery/jquery.min.js"></script>
+	<script src="~/plugins/toastr/toastr.min.js"></script>
+	<script type="text/javascript">
+		toastr.error('@TempData[WCAlert.Info]');
+		//toaster.options.showDuration = 5000;
+	</script>
+}
+
+@*@section Scripts{
+		<script src="~/plugins/jquery/jquery.min.js"></script>
+		<script src="~/plugins/toastr/toastr.min.js"></script>
+
+	}*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*@section Scripts{
+		<script src="~/lib/jquery/dist/jquery.js"></script>
+		<script src="~/plugins/toastr/toastr.min.js"></script>
+	}*@

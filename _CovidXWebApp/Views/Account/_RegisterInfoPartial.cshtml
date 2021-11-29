@@ -1,0 +1,44 @@
+﻿@model _CovidXWebApp.Models.ViewModels.RegisterModel
+
+
+<!--Patient Profile Inputs Start-->
+<!--Email-->
+<!-- INPUT VALIDATION MESSAGE -->
+<span asp-validation-for="Email" class="text-danger"></span>
+<div class="input-group mb-3">
+	<input asp-for="Email" type="email" class="form-control" placeholder="Email">
+	<div class="input-group-append">
+		<div class="input-group-text">
+			<span class="fas fa-envelope"></span>
+		</div>
+	</div>
+
+</div>
+
+
+
+<!-- Password -->
+<!-- INPUT VALIDATION MESSAGE -->
+<span asp-validation-for="Password" class="text-danger"></span>
+
+<div class="input-group mb-3">
+	<input asp-for="Password" type="password" class="form-control" placeholder="Password">
+	<div class="input-group-append">
+		<div class="input-group-text">
+			<span class="fas fa-lock"></span>
+		</div>
+	</div>
+
+</div>
+
+<!-- INPUT LABEL -->
+<!-- INPUT VALIDATION MESSAGE -->
+<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+<div class="input-group mb-3">
+	<input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Retype password">
+	<div class="input-group-append">
+		<div class="input-group-text">
+			<span class="fas fa-lock"></span>
+		</div>
+	</div>
+</div>

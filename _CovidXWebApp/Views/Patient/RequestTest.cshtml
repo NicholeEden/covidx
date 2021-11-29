@@ -1,0 +1,81 @@
+﻿@model TestRequestCreateViewModel
+@inject IPatientService _patientService
+@{
+	Layout = "~/Views/Shared/CovidXAdminLte/_Layout.cshtml";
+	ViewData["Title"] = "Profile";
+}
+
+<!-- PAGE HEADER -->
+<partial name="Header/_TestRequestPartial.cshtml" />
+
+@section Scripts{
+	<script>
+		$(function () {
+
+			$('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+
+			$('[data-mask]').inputmask()
+		})
+	</script>
+}
+
+<!-- 12 COLUMN ROW START -->
+<div class="row justify-content-center">
+	<!-- ADD CARD HERE -->
+	<!-- 12 COLUMN CARD START -->
+	<form asp-controller="Patient"
+		  asp-action="RequestTest"
+		  class="col-md-12 form-horizontal">
+		<div class="card card-danger">
+			<!-- CARD HEADER START -->
+			<div class="card-header">
+				<h3 class="card-title">Request a Covid-19 Test</h3>
+				<!-- CARD TOOLS START -->
+				<div class="card-tools">
+					<!-- ADD CARD TOOLS HERE -->
+					<!-- This will cause the card to close when clicked -->
+					<partial name="Card/Tools/_removePartial.cshtml" />
+
+					<!-- This will cause the card to maximize when clicked -->
+					<partial name="Card/Tools/_maximizePartial.cshtml" />
+					<!-- This will cause the card to minimize when clicked -->
+					<partial name="Card/Tools/_collapsePartial.cshtml" />
+
+				</div>
+				<!-- CARD TOOLS END -->
+			</div>
+			<!-- CARD HEADER END -->
+			<!-- CARD BODY START -->
+			<div class="card-body">
+				<!-- ADD CONTENT HERE -->
+				<!--Partial View for Dependent Info-->
+				<partial name="TestRequestDetails/_TestReqDependent.cshtml" model="Model" />
+
+			</div>
+			<!-- CARD BODY END -->
+			<!-- CARD FOOTER START -->
+			<div class="card-footer">
+				<!-- ADD BUTTONS HERE -->
+				<button type="submit"
+						class="btn btn-outline-danger">
+					Save
+				</button>
+				<a asp-action="Index"
+				   asp-controller="Home"
+				   class="btn btn-outline-primary float-right">
+					Cancel
+				</a>
+			</div>
+			<!-- CARD FOOTER END -->
+		</div>
+	</form>
+	<!-- 12 COLUMN CARD END -->
+
+</div>
+
+
+
+
+
+
+

@@ -1,0 +1,121 @@
+﻿@inject ITestRequestService _testRequestService
+@inject INurseService _nurseService
+
+@inject UserManager<CovidXUser> _userManager
+
+
+@{
+
+	//// get the user id
+	var userID = await _userManager.GetUserAsync(User);
+	var nurse = _nurseService.FindNurseByUserID(userID.Id);
+
+
+
+}
+
+<!-- PAGE HEADER -->
+<partial name="Header/_viewAssigned" />
+
+
+<!-- 6 COLUMN CARD START -->
+<div class="col-md-12">
+	<div class="card card-lightblue">
+		<!-- CARD HEADER START -->
+		<div class="card-header border-0">
+			<h3 class="card-title">Test Requests by favourite Suburbs</h3>
+			<!-- CARD TOOLS START -->
+			<div class="card-tools">
+				<!-- ADD CARD TOOLS HERE -->
+				<partial name="CovidXAdminLte/Card/Tools/_collapsePartial" />
+				<partial name="CovidXAdminLte/Card/Tools/_maximizePartial" />
+
+			</div>
+			<!-- CARD TOOLS END -->
+		</div>
+		<!-- CARD HEADER END -->
+		<!-- CARD BODY START -->
+		<div class="card-body table-responsive p-0">
+			<!-- ADD CONTENT HERE -->
+			<table class="table table-striped table-valign-middle">
+				<thead>
+					<tr>
+						<!-- TABLE HEADERS -->
+						<th>Test Location</th> <!-- Test Address-->
+						<th>Suburb</th>
+						<th>Test Status</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					@if (nurse is null)
+					{
+						//show nothing
+					}
+					else
+					{
+						foreach (var fav in _testRequestService.GetAssignedRequests(userID.Id))
+						{
+							<!-- TABLE CONTENT ROW -->
+							<tr>
+								<td>
+									@fav.TestAddress1
+								</td>
+								<td>
+									@fav.Suburb.SuburbName
+								</td>
+								<td>
+									@switch (fav.RequestStatus)
+									{
+										case CovidEnums.TestRequestStatus.New:
+											<span class="badge bg-orange">@fav.RequestStatus</span>
+											break;
+										case CovidEnums.TestRequestStatus.Cancelled:
+											<span class="badge bg-red">@fav.RequestStatus</span>
+											break;
+										case CovidEnums.TestRequestStatus.Assigned:
+											<span class="badge bg-yellow">@fav.RequestStatus</span>
+											break;
+										case CovidEnums.TestRequestStatus.Scheduled:
+											<span class="badge bg-green">@fav.RequestStatus</span>
+											break;
+										case CovidEnums.TestRequestStatus.Performed:
+											<span class="badge bg-success">@fav.RequestStatus</span>
+											break;
+										case CovidEnums.TestRequestStatus.AtLab:
+											<span class="badge bg-blue">@fav.RequestStatus</span>
+											break;
+										case CovidEnums.TestRequestStatus.Closed:
+											<span class="badge bg-danger">@fav.RequestStatus</span>
+											break;
+										default:
+											break;
+									}
+								</td>
+								<td>
+									@if (fav.RequestStatus == CovidEnums.TestRequestStatus.Assigned)
+									{
+										<form asp-controller="Nurse"
+											  asp-action="UnAssignTest">
+											<button type="submit"
+													class="btn btn-block btn-outline-danger btn-flat">
+												Cancel
+											</button>
+											<input type="hidden" name="testRequestID" value="@fav.TestRequestId" />
+											<input type="hidden" name="nurseID" value="@nurse.NurseId" />
+										</form>
+									}
+								</td>
+							</tr>
+						}
+					}
+
+				</tbody>
+			</table>
+
+		</div>
+		<!-- CARD BODY END -->
+	</div>
+</div>
+<!-- 6 COLUMN CARD END -->

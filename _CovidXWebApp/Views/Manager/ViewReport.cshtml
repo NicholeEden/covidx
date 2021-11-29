@@ -1,0 +1,207 @@
+﻿@model ManagerViewModel
+@inject INurseService _nurseService
+
+
+
+@{
+
+	
+}
+
+
+<div class="card col-md-12">
+
+
+	@if (Model is not null)
+	{
+
+
+			//find nurse using nurse id
+			var nurseFound = _nurseService.FindNurseByNurseID(Model.nurseID);
+
+			<div class="card-header">
+				<h3 class="card-title">Tests performed for @nurseFound.FirstName @nurseFound.LastName</h3>
+			</div>
+
+
+	}
+            else
+            {
+					<div class="card-header">
+						<h3 class="card-title">Tests performed during a specific date range </h3>
+					</div>
+            }
+
+
+	<!-- /.card-header -->
+	<div class="card-body">
+		<table id="example" class="table table-head-fixed table-hover text-nowrap table-bordered table-striped">
+			<thead>
+				<tr>
+					<th>Test Subject</th>
+					<th>Medical Aid Plan</th>
+					<th>Medical Aid Scheme</th>
+					<th>Barcode</th>
+					<th>Test Date</th>
+					<th>Test Time</th>
+					<th>Test Result</th>
+					<th>Lab User</th>
+				</tr>
+			</thead>
+			@if (Model is not null)
+			{
+				var list = _nurseService.GetReportDetail(Model);
+
+				@if (list == null)
+				{
+					@*@if (_patientService.GetDependents(patient.PatientId) is null)
+						{*@
+					// no content to display
+					//}
+
+				}
+				else
+				{
+		<tbody>
+			<!-- ROW CONTENT HERE -->
+			@foreach (var item in list)
+			{
+				<tr>
+					@if (item.Test.TestRequest.DependentId is null)
+					{
+						<td>
+							@item.Test.TestRequest.Patient.FirstName  @item.Test.TestRequest.Patient.LastName
+
+						</td>
+						@if (item.Test.TestRequest.Patient.MedicalAidPlan is not null)
+						{
+							<td>
+								@item.Test.TestRequest.Patient.MedicalAidPlan.Description
+							</td>
+							<td>
+								@item.Test.TestRequest.Patient.MedicalAidPlan.MedicalAidScheme.Description
+							</td>
+						}
+						else
+						{
+							<td>
+								Private
+							</td>
+							<td>
+								Private
+							</td>
+						}
+
+					}
+					else
+					{
+						<td>
+							@item.Test.TestRequest.Dependent.FirstName  @item.Test.TestRequest.Dependent.LastName
+
+						</td>
+						@if (item.Test.TestRequest.Patient.MedicalAidPlan is not null)
+						{
+							<td>
+								@item.Test.TestRequest.Dependent.MedicalAidPlan.Description
+							</td>
+							<td>
+								@item.Test.TestRequest.Dependent.MedicalAidPlan.MedicalAidScheme.Description
+							</td>
+
+						}
+						else
+						{
+							<td>
+								Private
+							</td>
+							<td>
+								Private
+							</td>
+						}
+
+
+
+
+					}
+
+					<td>
+						@item.Test.BarCode
+					</td>
+
+					<td>
+						@item.Test.TestDate.ToShortDateString()
+					</td>
+					<td>
+						@item.Test.TestTime.ToShortTimeString()
+					</td>
+					<td>
+						@item.Test.TestResult
+					</td>
+					<td>
+						Mandla Khumalo
+					</td>
+
+
+
+				</tr>
+			}
+			<tr>
+				<td class="bg-gray-light"> <b>No of tests performed:</b></td>
+				<td>@list.Count()</td>
+				<td class="bg-gray-light">
+					<b>No of positive results</b>
+				</td>
+				<td>
+					@list.Where(x => x.Test.TestResult == "Positive").Count()
+				</td>
+				<td class="bg-gray-light">
+					<b>No of negative results</b>
+				</td>
+				<td>
+					@list.Where(x => x.Test.TestResult == "Negative").Count()
+				</td>
+				<td>
+				</td>
+				<td>
+				</td>
+			</tr>
+
+		</tbody>
+					<!-- TABLE BODY CONTENT END -->
+				}
+
+				@*<tfoot >
+					<tr>
+						<td class="bg-gray-light"> <b>No of tests performed:</b></td>
+						<td>@list.Count()</td>
+						<td class="bg-gray-light">
+							<b>No of positive results</b>
+						</td>
+						<td>
+							@list.Where(x => x.Test.TestResult == "Positive").Count()
+						</td>
+						<td class="bg-gray-light">
+							<b>No of negative results</b>
+						</td>
+						<td>
+							@list.Where(x => x.Test.TestResult == "Negative").Count()
+						</td>
+						<td>
+							
+						</td>
+						<td>
+						
+						</td>
+					</tr>
+				</tfoot>*@
+			}
+
+		</table>
+	</div>
+	<!-- /.card-body -->
+</div>
+<!-- /.card -->
+<!-- /.col -->
+<!-- /.row -->
+<!-- /.container-fluid -->
+<!-- /.content -->

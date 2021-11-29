@@ -1,0 +1,70 @@
+﻿@model _CovidXWebApp.Models.ViewModels.RegisterModel
+
+@{ Layout = null; }
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>CovidX | Register</title>
+	<!-- Tell the browser to be responsive to screen width -->
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="~/plugins/fontawesome-free/css/all.min.css">
+	<!--Toaster-->
+	<link rel="stylesheet" href="~/plugins/toastr/toastr.min.css">
+	<!-- Ionicons -->
+	<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+	<!-- icheck bootstrap -->
+	<link rel="stylesheet" href="~/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+	<!-- Theme style -->
+	<link rel="stylesheet" href="~/css/adminlte.min.css">
+	<!-- Google Font: Source Sans Pro -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
+
+<body class="hold-transition register-page">
+	<!--Toaster partial-->
+	<partial name="_NotificationPartial" />
+	<div class="register-box">
+		<div class="register-logo">
+			<b>COVIDX</b>
+		</div>
+
+		<div class="card">
+			<div class="card-body register-card-body">
+				<p class="login-box-msg">Register a new nurse to the system</p>
+
+				<form asp-action="RegisterNurse" method="post">
+					<div asp-validation-summary="All" class="text-danger"></div>
+
+					<!-- ADD CONTENT HERE -->
+					<partial name="_RegisterInfoPartial" model="Model" />
+
+					<!-- ADD BUTTONS HERE -->
+					<button type="submit" class="btn btn-primary btn-block">Register</button>
+
+					<!-- CARD FOOTER END -->
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- CONTENT CONTAINER END -->
+	<script src="~/plugins/jquery/jquery.min.js"></script>
+	<script src="~/plugins/toastr/toastr.min.js"></script>
+	<!-- Bootstrap 4 -->
+	<script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<!-- AdminLTE App -->
+	<script src="~/js/adminlte.min.js"></script>
+
+	@*<script>
+			$(function () {
+
+				$('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+
+				$('[data-mask]').inputmask()
+			})
+		</script>*@
+</body>
+</html>

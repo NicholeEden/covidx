@@ -1,0 +1,83 @@
+﻿
+@inject IPatientService _patientService
+@inject UserManager<CovidXUser> _userManager
+
+@{
+
+	var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+	//Find patient by user ID
+	var patient = _patientService.FindPatientByUserID(user.Id);
+
+
+
+
+
+}
+
+@if (patient is not null)
+
+{
+	var testrequestNew = _patientService.GetNewTestRequestsByPatientID(patient.PatientId);
+	var testrequestScheduled = _patientService.GetScheduledTestRequestsByPatientID(patient.PatientId);
+	var cancelledReq = _patientService.GetCancelledTestRequestsByPatientID(patient.PatientId);
+
+	<div class="row">
+
+		<div class="col-lg-2 col-5">
+
+
+
+
+
+			<!-- small card -->
+			<div class="small-box bg-danger">
+				<div class="inner">
+					<h3>@testrequestNew.Count()</h3>
+
+					<p>New Requests</p>
+				</div>
+				<div class="icon">
+					<i class="fas fa-file-medical"></i>
+				</div>
+				<a href="#" class="small-box-footer">
+					More info <i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+
+		<div class="col-lg-2 col-5">
+			<!-- small card -->
+			<div class="small-box bg-gradient-danger">
+				<div class="inner">
+					<h3>@testrequestScheduled.Count()</h3>
+
+					<p>Scheduled Requests</p>
+				</div>
+				<div class="icon">
+					<i class="fas fa-shopping-cart"></i>
+				</div>
+				<a href="#" class="small-box-footer">
+					More info <i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+
+		<div class="col-lg-2 col-5">
+			<!-- small card -->
+			<div class="small-box bg-gradient-danger">
+				<div class="inner">
+					<h3>@cancelledReq.Count()</h3>
+
+					<p>Canceled Requests</p>
+				</div>
+				<div class="icon">
+					<i class="fas fa-file-medical-alt"></i>
+				</div>
+				<a href="#" class="small-box-footer">
+					More info <i class="fas fa-arrow-circle-right"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+
+}

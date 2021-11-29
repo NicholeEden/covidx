@@ -1,0 +1,254 @@
+﻿@inject IPatientService _patientService
+@inject UserManager<CovidXUser> _usermanager
+@{
+	Layout = "~/Views/Shared/CovidXAdminLte/_Layout.cshtml";
+	ViewData["Title"] = "Nurse Profile";
+}
+
+@{
+	var user = _usermanager.FindByNameAsync(User.Identity.Name).Result;
+	var patient = _patientService.GetPatientDetail(user.Id);
+
+	//var testDetails = _patientService.GetTestDetail(user.Id);
+
+	var testDetails = _patientService.GetTestInfo(user.Id);
+
+}
+
+<!-- PAGE HEADER -->
+<partial name="Header/_viewPartial" />
+
+
+<!-- 12 COLUMN ROW START -->
+<div class="row justify-content-center">
+	<!-- PROFILE SUMMARY-->
+	<div class="card card-danger card-outline col-md-3">
+		<div class="card-body box-profile">
+			@if (patient.Gender == CovidEnums.Gender.Male)
+			{
+				<div class="text-center">
+					<img class="profile-user-img img-fluid img-circle" src="/img/patientMale.png" alt="User profile picture">
+				</div>
+
+			}
+			else if (patient.Gender == CovidEnums.Gender.Female)
+			{
+				<div class="text-center">
+					<img class="profile-user-img img-fluid img-circle" src="/img/patientFemale.png" alt="User profile picture">
+				</div>
+			}
+			else
+			{
+				<div class="text-center">
+					<img class="profile-user-img img-fluid img-circle" src="/img/Patient1.png" alt="User profile picture">
+				</div>
+			}
+
+			<h3 class="profile-username text-center">@patient.FirstName @patient.LastName</h3>
+
+			<p class="text-muted text-center">@patient.Gender.ToString()</p>
+
+			<ul class="list-group list-group-unbordered mb-3">
+				<li class="list-group-item">
+					<b>Date of Birth</b> <div class="float-right">@patient.Dob.ToShortDateString()</div>
+				</li>
+				<li class="list-group-item">
+					<b>Address </b> <div class="float-right">@patient.AddressLine1</div>
+				</li>
+				@if (patient.AddressLine2 is not null)
+				{
+					<li class="list-group-item">
+						<b>Address Line 2 </b> <div class="float-right">@patient.AddressLine2</div>
+					</li>
+				}
+				<li class="list-group-item">
+					<b>Residential Suburb</b> <div class="float-right">@patient.Suburb.SuburbName</div>
+				</li>
+
+				@if (patient.MedicalAidStatus == true)
+				{
+
+					<li class="list-group-item">
+						<b>Medical Aid Scheme</b> <div class="float-right">@patient.MedicalAidPlan.MedicalAidScheme.Description</div>
+					</li>
+					<li class="list-group-item">
+						<b>Medical Aid Scheme</b> <div class="float-right">@patient.MedicalAidPlan.Description</div>
+					</li>
+
+				}
+				else
+				{
+					<li class="list-group-item">
+						<b>Medical Aid Status</b> <div class="float-right">None</div>
+					</li>
+				}
+
+				@*<li class="list-group-item">
+						<b>Test Requests Pending</b> <div class="float-right">@pendingRequests</div>
+					</li>*@
+				<li class="list-group-item">
+					<b>Dependents</b> <div class="float-right">@patient.Dependents.Count()</div>
+				</li>
+			</ul>
+
+			<a href="@Url.Action(action: "UpdateProfile", controller: "Patient")" class="btn btn-outline-danger btn-block"><b>Edit Profile</b></a>
+			@*<a href="@Url.Action(action: "Book", controller: "Patient")" class="btn btn-outline-primary btn-block"><b>Schedule a Test</b></a>*@
+		</div>
+	</div>
+
+	<!--TEST SUMMARY -->
+	<div class="col-md-9">
+		<div class="card  card-danger">
+			<!-- CARD HEADER START -->
+			<div class="card-header border-0">
+				<h3 class="card-title">Test Results</h3>
+				<!-- CARD TOOLS START -->
+				<div class="card-tools">
+					<!-- ADD CARD TOOLS HERE -->
+					<partial name="CovidXAdminLte/Card/Tools/_collapsePartial" />
+					<partial name="CovidXAdminLte/Card/Tools/_maximizePartial" />
+
+				</div>
+				<!-- CARD TOOLS END -->
+			</div>
+			<!-- CARD HEADER END -->
+			<!-- CARD BODY START -->
+			<div class="card-body table-responsive p-0">
+				<!-- ADD CONTENT HERE -->
+				<table class="table table-striped table-valign-middle">
+					<thead>
+						<tr>
+							<!-- TABLE HEADERS -->
+							@*<th>Test</th>*@
+							<th>Test Subject</th>
+							<th>Barcode</th>
+							<th>Temperature</th>
+							<th>Blood Pressure</th>
+							<th>Oxygen Levels</th>
+							<th>Test Date</th>
+							<th>Test Time</th>
+							<th>Test Result</th>
+							<th>Lab User</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						@if (testDetails == null)
+						{
+							//show nothing
+						}
+						else
+						{
+
+							<!-- TABLE CONTENT ROW -->
+							@foreach (var test in testDetails)
+							{
+								<tr>
+
+
+									@if (test.TestRequest.DependentId is null)
+									{
+										<td>
+											@test.TestRequest.Patient.FirstName  @test.TestRequest.Patient.LastName
+
+										</td>
+									}
+									else
+									{
+										<td>
+											@test.TestRequest.Dependent.FirstName  @test.TestRequest.Dependent.LastName
+
+										</td>
+									}
+
+									<td>
+										@test.BarCode
+									</td>
+									<td>
+										@test.Temperature
+									</td>
+									<td>
+										@test.BloodPressure
+									</td>
+									<td>
+										@test.OxygenLevel
+									</td>
+									<td>
+										@test.TestDate.ToShortDateString()
+									</td>
+									<td>
+										@test.TestTime.ToShortTimeString()
+									</td>
+
+									<td>
+										@if (test.TestResult == "Positive")
+										{
+											<span class="badge bg-red">@test.TestResult</span>
+										}
+										else if (test.TestResult == "Negative")
+										{
+											<span class="badge bg-green">@test.TestResult</span>
+										}
+
+
+									</td>
+									<td>
+										Mandla Khumalo
+
+									</td>
+								</tr>
+							}
+
+						}
+
+					</tbody>
+				</table>
+
+			</div>
+			<!-- CARD BODY END -->
+			<!-- CARD FOOTER START -->
+			<div class="card-footer">
+				<!-- ADD BUTTONS HERE -->
+
+			</div>
+			<!-- CARD FOOTER END -->
+		</div>
+	</div>
+
+
+	<!--<div class="col-md-12">
+		<div class="card card-outline card-danger">-->
+			<!-- CARD HEADER START -->
+			<!--<div class="card-header border-0">
+				<h3 class="card-title ">Dependent Details</h3>-->
+				<!-- CARD TOOLS START -->
+				<!--<div class="card-tools">-->
+					<!-- ADD CARD TOOLS HERE -->
+					<!-- This will cause the card to close when clicked -->
+					<!--<partial name="Card/Tools/_removePartial.cshtml" />-->
+
+					<!-- This will cause the card to maximize when clicked -->
+					<!--<partial name="Card/Tools/_maximizePartial.cshtml" />-->
+					<!-- This will cause the card to minimize when clicked -->
+					<!--<partial name="Card/Tools/_collapsePartial.cshtml" />
+				</div>-->
+				<!-- CARD TOOLS END -->
+			<!--</div>-->
+			<!-- CARD HEADER END -->
+			<!-- CARD BODY START -->
+			<!--<div class="card-body table-responsive p-0">-->
+				<!-- ADD CONTENT HERE -->
+				<!--<partial name="Datatable/_DependentTable.cshtml" />
+			</div>-->
+			<!-- CARD BODY END -->
+			<!-- CARD FOOTER START -->
+			<!--<div class="card-footer">-->
+				<!-- ADD BUTTONS HERE -->
+
+			<!--</div>-->
+			<!-- CARD FOOTER END -->
+		<!--</div>
+	</div>-->
+
+
+</div>

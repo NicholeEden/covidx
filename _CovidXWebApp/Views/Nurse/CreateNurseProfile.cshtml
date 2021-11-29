@@ -1,0 +1,199 @@
+﻿@model NurseCreateViewModel
+@inject INurseService _nurseService
+@{
+	Layout = "~/Views/Shared/CovidXAdminLte/_Layout.cshtml";
+	ViewData["Title"] = "Nurse Profile";
+}
+
+<!-- PAGE HEADER -->
+<partial name="Header/_createPartial.cshtml" />
+
+@section Scripts{
+	<script>
+		$(function () {
+
+			$('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+
+			$('[data-mask]').inputmask()
+		})
+	</script>
+}
+
+
+<!-- 6 COLUMN CARD START -->
+<form asp-controller="Nurse"
+	  asp-action="CreateNurseProfile"
+	  class="col-md-12">
+	<div class="card card-lightblue">
+		<!-- CARD HEADER START -->
+		<div class="card-header">
+			<h3 class="card-title">Set up Nurse Profile</h3>
+			<!-- CARD TOOLS START -->
+			<div class="card-tools">
+				<!-- ADD CARD TOOLS HERE -->
+
+			</div>
+			<!-- CARD TOOLS END -->
+		</div>
+		<!-- CARD HEADER END -->
+		<!-- CARD BODY START -->
+		<div class="card-body">
+			<!-- ADD CONTENT HERE -->
+			<!-- CARD BODY START -->
+			<div class="card-body">
+				<!-- TAB CONTENT START -->
+				<div class="active tab-pane"
+					 id="custom-content-below-profile"
+					 role="tabpanel"
+					 aria-labelledby="custom-content-below-profile-tab">
+					<!-- CONTENT HERE-->
+					<!-- First Name -->
+					<label asp-for="FirstName">First Name</label>
+					<div class="input-group mb-3">
+						<input asp-for="FirstName" class="form-control" placeholder="First Name">
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-house-user"></span>
+							</div>
+						</div>
+						<span asp-validation-for="FirstName" class="error invalid-feedback" />
+					</div>
+
+					<!-- Last Name -->
+					<label asp-for="LastName">Last Name</label>
+					<div class="input-group mb-3">
+						<input asp-for="LastName" class="form-control" placeholder="Last Name">
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-house-user"></span>
+							</div>
+						</div>
+						<span asp-validation-for="LastName" class="error invalid-feedback" />
+					</div>
+
+					<!-- ID number -->
+					<label asp-for="Idnumber">ID Number</label>
+					<div class="input-group mb-3">
+						<input asp-for="Idnumber" class="form-control" placeholder="ID Number">
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-envelope"></span>
+							</div>
+						</div>
+						<span asp-validation-for="Idnumber" class="error invalid-feedback" />
+					</div>
+
+					<!-- Mobile number -->
+					<label asp-for="MobileNumber">Mobile Number</label>
+					<div class="input-group mb-3">
+						<input asp-for="MobileNumber" class="form-control" placeholder="Mobile Number">
+						<div class="input-group-append">
+							<div class="input-group-text">
+								<span class="fas fa-mobile"></span>
+							</div>
+						</div>
+						<span asp-validation-for="MobileNumber" class="error invalid-feedback" />
+					</div>
+
+					<!-- DATE INPUT MASK START -->
+					<div class="form-group">
+						<!-- LABEL -->
+						<label asp-for="YearQualified">Year Qualified</label>
+
+						<div class="input-group">
+							<!-- INPUT -->
+							<input asp-for="YearQualified"
+								   type="text"
+								   class="form-control"
+								   data-inputmask-alias="datetime"
+								   data-inputmask-inputformat="dd/mm/yyyy"
+								   data-mask
+								   id="datemask">
+
+							<!-- ICON -->
+							<div class="input-group-append">
+								<span class="input-group-text">
+									<i class="far fa-calendar-alt"></i>
+								</span>
+							</div>
+							<!-- VALIDATION MESSAGE -->
+							<span asp-validation-for="YearQualified" />
+						</div>
+					</div>
+					<!-- Residential Suburb List -->
+					<div class="input-group mb-3">
+
+						<!-- INPUT LABEL -->
+						<label asp-for="SuburbId">Residential Suburb</label>
+						<!-- INPUT ITEM -->
+						<select asp-for="SuburbId"
+								asp-items="_nurseService.GetSuburbList()"
+								class="selectpicker"
+								data-width="100%"
+								data-live-search="true"
+								title="Select search options">
+						</select>
+
+						<!-- INPUT VALIDATION MESSAGE -->
+						<span asp-validation-for="SuburbId"
+							  style="display:inline" />
+					</div>
+
+					<!-- Rank -->
+					<div class="form-group">
+
+						<!-- INPUT LABEL -->
+						<label asp-for="Rank">Rank</label>
+
+						<!-- INPUT ITEM -->
+						<select asp-for="Rank"
+								asp-items="Html.GetEnumSelectList<EFCORE_DATAACCESS.Models.CovidEnums.Rank>()"
+								class="selectpicker"
+								data-width="100%"
+								data-live-search="true"
+								title="Please select rank">
+						</select>
+
+						<!-- INPUT VALIDATION MESSAGE -->
+						<span asp-validation-for="Rank"
+							  style="display:inline" />
+					</div>
+
+
+
+				</div>
+				<!-- SELECT INPUT END -->
+			</div>
+			<!-- TAB CONTENT END -->
+			<!-- CARD BODY END -->
+		</div>
+		<!-- CARD BODY END -->
+		<!-- CARD FOOTER START -->
+		<div class="card-footer">
+			<!-- ADD BUTTONS HERE -->
+			<button type="submit"
+					class="btn btn-outline-primary">
+				Save
+			</button>
+			<a asp-action="Index"
+			   asp-controller="Home"
+			   class="btn btn-outline-secondary float-right">
+				Cancel
+			</a>
+		</div>
+		<!-- CARD FOOTER END -->
+	</div>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+

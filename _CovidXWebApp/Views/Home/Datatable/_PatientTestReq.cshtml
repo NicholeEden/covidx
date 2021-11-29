@@ -1,0 +1,173 @@
+﻿
+@inject IPatientService _patientService
+@inject UserManager<CovidXUser> _userManager
+
+
+
+@{
+
+	var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+	//Find patient by user ID
+	var patient = _patientService.FindPatientByUserID(user.Id);
+
+	
+
+}
+
+
+
+<!-- DATA TABLE START -->
+<table id="dtTable" class="table table-striped table-valign-middle">
+	<!-- HEADER START -->
+	<thead>
+		<tr>
+			<!-- BUTTON HEADER -->
+			<!-- COLUMN HEADER START-->
+			@*<th>TestRequestID</th>
+			<th>RequestorID</th>*@
+			<th>Test Subject</th>
+			<th>Requested Date </th>
+			<th>Requested Time</th>
+			<th>Request Status</th>
+			<th>Test Address </th>
+			<th>Scheduled Date</th>
+			
+
+			<th>Time Slot</th>
+			<th>Nurse </th>
+			<th>Actions</th>
+			@*<th>End Time</th>*@
+			<!-- COLUMN HEADER END -->
+		</tr>
+	</thead>
+	<!-- HEADER END -->
+	<!-- ADD CONTENT HERE -->
+
+	@if (patient == null)
+	{
+		@*@if (_patientService.GetDependents(patient.PatientId) is null)
+		{*@
+		      // no content to display
+		//}
+
+	}
+	else
+	{
+	<tbody>
+		<!-- ROW CONTENT HERE -->
+		@foreach (var item in _patientService.GetAllTestRequestsByPatientID(patient.PatientId))
+		{
+		<tr>
+			@*<td>@item.TestRequestId</td>
+		<td>@item.RequesterId</td>*@
+			<td>@item.FullName</td>
+			<td>
+				<small class="text-success mr-1">
+					<i class="fas fa-calendar-alt"></i>
+				</small>
+				@item.RequestDate.ToShortDateString()
+
+			</td>
+			<td>@item.RequestDate.ToShortTimeString()</td>
+			<td>
+				@if (item.RequestStatus == CovidEnums.TestRequestStatus.New)
+				{
+					<span class="badge bg-orange">@item.RequestStatus</span>
+				}
+				else if (item.RequestStatus == CovidEnums.TestRequestStatus.Cancelled)
+				{
+					<span class="badge bg-red">@item.RequestStatus</span>
+				}
+				else if (item.RequestStatus == CovidEnums.TestRequestStatus.Scheduled)
+				{
+					<span class="badge bg-pink">@item.RequestStatus</span>
+				}
+				else if (item.RequestStatus == CovidEnums.TestRequestStatus.Assigned)
+				{
+					<span class="badge bg-yellow">@item.RequestStatus</span>
+				}
+				else if (item.RequestStatus == CovidEnums.TestRequestStatus.Performed)
+				{
+					<span class="badge bg-green">@item.RequestStatus</span>
+				}
+				else if (item.RequestStatus == CovidEnums.TestRequestStatus.AtLab)
+				{
+					<span class="badge bg-blue">@item.RequestStatus</span>
+				}
+				else if (item.RequestStatus == CovidEnums.TestRequestStatus.Closed)
+				{
+					<span class="badge bg-red">@item.RequestStatus</span>
+				}
+
+			</td>
+			<td>
+				@item.TestAddress1
+			</td>
+			@*<td>@item.DateAssigned</td>*@
+		<td>
+			<small class="text-success mr-1">
+				<i class="fas fa-calendar-alt"></i>
+			</small>
+
+			@if (item.EndTime is not null)
+			{
+				@Convert.ToDateTime(item.EndTime).ToShortDateString()
+			}
+			else
+			{
+		       <p>To be scheduled</p>
+
+			}
+
+
+		</td>
+			<td>
+
+				@Convert.ToDateTime(item.StartTime).ToShortTimeString() - @Convert.ToDateTime(item.EndTime).ToShortTimeString() 
+			
+			</td>
+				@*<td>@Convert.ToDateTime(item.EndTime).ToShortTimeString()</td>*@
+			<td>@item.NurseName</td>
+
+			<td>
+				@if (item.RequestStatus != CovidEnums.TestRequestStatus.Performed)
+				{
+				<form asp-controller="Patient"
+					  asp-action="CancelTest">
+					<button type="submit"
+							class="btn btn-block btn-outline-danger btn-flat">
+						Cancel
+					</button>
+					<input type="hidden" name="testRequestID" value="@item.TestRequestId" />
+					<input type="hidden" name="userID" value="@user.Id" />
+				</form>
+				}
+
+			</td>
+		</tr>
+		}
+	</tbody>
+	<!-- TABLE BODY CONTENT END -->
+	}
+</table>
+<!-- DATA TABLE END -->
+
+
+@section Scripts
+
+{
+
+
+	<script>
+		$(function () {
+
+			$("#dtTable").DataTable({
+				"responsive": true,
+				"lengthChange": false,
+				"autoWidth": false,
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#dtTable_wrapper .col-md-6:eq(0)');
+		})
+	</script>
+
+}

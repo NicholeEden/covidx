@@ -1,0 +1,203 @@
+﻿
+@inject IPatientService _patientService
+@inject UserManager<CovidXUser> _userManager
+
+
+@{
+	Layout = "~/Views/Shared/CovidXAdminLte/_Layout.cshtml";
+	ViewData["Title"] = "Dashboard";
+}
+
+
+
+
+
+@if (User.Identity.IsAuthenticated)
+{
+
+
+
+
+
+	@if (User.IsInRole("Patient"))
+	{
+
+		<!-- PAGE HEADER -->
+		<partial name="Header/_DashboardPatientPartial.cshtml" />
+		@*<h1>Role is: Patient</h1>*@
+
+		//Request Counters
+		<partial name="CovidXAdminLte/Dashboard/_patientRequestsCounter" />
+
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card card-outline card-danger ">
+					<!-- CARD HEADER START -->
+					<div class="card-header border-0">
+						<h3 class="card-title ">Dependent Details</h3>
+						<!-- CARD TOOLS START -->
+						<div class="card-tools">
+							<!-- ADD CARD TOOLS HERE -->
+							<!-- This will cause the card to close when clicked -->
+							<partial name="Card/Tools/_removePartial.cshtml" />
+
+							<!-- This will cause the card to maximize when clicked -->
+							<partial name="Card/Tools/_maximizePartial.cshtml" />
+							<!-- This will cause the card to minimize when clicked -->
+							<partial name="Card/Tools/_collapsePartial.cshtml" />
+						</div>
+						<!-- CARD TOOLS END -->
+					</div>
+					<!-- CARD HEADER END -->
+					<!-- CARD BODY START -->
+					<div class="card-body table-responsive p-0">
+						<!-- ADD CONTENT HERE -->
+						<partial name="Datatable/_DependentTable.cshtml" />
+					</div>
+					<!-- CARD BODY END -->
+					<!-- CARD FOOTER START -->
+					<div class="card-footer">
+						<!-- ADD BUTTONS HERE -->
+
+					</div>
+					<!-- CARD FOOTER END -->
+				</div>
+			</div>
+
+
+			<!--test request for patients-->
+
+			<div class="col-md-12">
+				<div class="card card-outline card-danger">
+					<!-- CARD HEADER START -->
+					<div class="card-header border-0 ">
+						<h3 class="card-title ">Test Request Details</h3>
+						<!-- CARD TOOLS START -->
+						<div class="card-tools">
+							<!-- ADD CARD TOOLS HERE -->
+							<!-- ADD CARD TOOLS HERE -->
+							<!-- This will cause the card to close when clicked -->
+							<partial name="Card/Tools/_removePartial.cshtml" />
+
+							<!-- This will cause the card to maximize when clicked -->
+							<partial name="Card/Tools/_maximizePartial.cshtml" />
+							<!-- This will cause the card to minimize when clicked -->
+							<partial name="Card/Tools/_collapsePartial.cshtml" />
+							<!-- <partial name="AdminLTE/Card/Tool/_remove" /> -->
+
+						</div>
+						<!-- CARD TOOLS END -->
+					</div>
+					<!-- CARD HEADER END -->
+					<!-- CARD BODY START -->
+					<div class="card-body table-responsive p-0">
+						<!-- ADD CONTENT HERE -->
+						<partial name="Datatable/_PatientTestReq.cshtml" />
+
+
+					</div>
+					<!-- CARD BODY END -->
+					<!-- CARD FOOTER START -->
+					<div class="card-footer">
+						<!-- ADD BUTTONS HERE -->
+
+					</div>
+					<!-- CARD FOOTER END -->
+				</div>
+			</div>
+			<!-- 6 COLUMN CARD END -->
+
+
+
+
+
+
+
+
+
+
+
+		</div>
+
+
+
+
+
+	}
+	else if (User.IsInRole("Manager"))
+	{
+		<!-- PAGE HEADER -->
+		<partial name="Header/_DashboardManager.cshtml" />
+
+
+
+		
+
+		<!--Dashbaord-->
+		<partial name="Dashboard/_ManagerDash.cshtml" />
+
+	}
+	else if (User.IsInRole("Nurse"))
+	{
+		<!-- PAGE HEADER -->
+		<partial name="Header/_DashboardNurse.cshtml" />
+		@*<h1>Role is: Nurse</h1>*@
+
+		<!--test request for nurses according to favourite suburbs-->
+		<partial name="CovidXAdminLte/Dashboard/_Nurse" />
+
+	}
+
+	else if (User.IsInRole("LabUser"))
+	{
+		<!-- PAGE HEADER -->
+		<partial name="Header/_DashboardLabUser.cshtml" />
+		@*<h1>Role is: LabUser</h1>*@
+
+	}
+
+
+	@*<h1>Successfully logged in @User.Identity.Name</h1>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+@section Scripts
+
+{
+
+	<script>
+		$(function () {
+
+			$("#dtTable").DataTable({
+				"responsive": true,
+				"lengthChange": false,
+				"autoWidth": false,
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#dtTable_wrapper .col-md-6:eq(0)');
+		})
+	</script>
+
+
+}

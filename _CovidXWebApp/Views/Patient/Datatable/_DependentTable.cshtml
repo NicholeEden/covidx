@@ -1,0 +1,89 @@
+﻿
+@inject IPatientService _patientService
+@inject UserManager<CovidXUser> _userManager
+
+
+
+@{
+
+	var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+	//Find patient by user ID
+	var patient = _patientService.FindPatientByUserID(user.Id);
+
+	
+
+}
+
+<!-- DATA TABLE START -->
+<table  class="table table-striped table-valign-middle">
+	<!-- HEADER START -->
+	<thead>
+		<tr>
+			<!-- BUTTON HEADER -->
+			@*<th>DependentID</th>*@
+			<!-- COLUMN HEADER START-->
+			<th>DependentID</th>
+			<th>First Name</th>
+			<th>Last Name</th>
+			<th>Relationship </th>
+			<!-- COLUMN HEADER END -->
+		</tr>
+	</thead>
+	<!-- HEADER END -->
+	<!-- ADD CONTENT HERE -->
+
+	@if (patient == null)
+	{
+		@*@if (_patientService.GetDependents(patient.PatientId) is null)
+		{*@
+		      // no content to display
+		//}
+
+	}
+	else
+	{
+	<tbody>
+		<!-- ROW CONTENT HERE -->
+		@foreach (var item in _patientService.GetDependents(patient.PatientId))
+		{
+			<tr>
+				@*<td>
+						<button asp-route-id="@item.Key"
+								type="submit"
+								class="btn btn-outline-primary btn-sm">
+							Details
+						</button>
+					</td>*@
+				<td>@item.DependentId</td>
+				<td>@item.FirstName</td>
+				<td>@item.LastName</td>
+				<td>@item.DependentType.Description</td>
+				@*<td>@item.Value5</td>*@
+
+			</tr>
+		}
+	</tbody>
+	<!-- TABLE BODY CONTENT END -->
+	}
+</table>
+<!-- DATA TABLE END -->
+
+
+@section Scripts
+
+{
+
+
+	@*<script>
+		$(function () {
+
+			$("#dtTable").DataTable({
+				"responsive": true,
+				"lengthChange": false,
+				"autoWidth": false,
+				"buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+			}).buttons().container().appendTo('#dtTable_wrapper .col-md-6:eq(0)');
+		})
+	</script>*@
+
+}

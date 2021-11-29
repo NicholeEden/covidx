@@ -1,0 +1,54 @@
+﻿@inject INurseService _nurseService
+@inject UserManager<CovidXUser> _userManager
+
+
+
+@{
+
+	var user = await _userManager.FindByEmailAsync(User.Identity.Name);
+
+	//// get the user id
+	//var user = await _userManager.GetUserAsync(User);
+
+	var favSuburbs = _nurseService.GetSuburbsPreffereds(user.Id);
+	//Find patient by user ID
+	//var patient = _patientService.FindPatientByUserID(user.Id);
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+@if (favSuburbs == null)
+{
+	@*@if (_patientService.GetDependents(patient.PatientId) is null)
+		{*@
+	// no content to display
+	//}
+
+}
+else
+{
+	@foreach (var item in favSuburbs)
+	{
+
+
+		<p class="text-muted">
+			<span class="tag tag-danger">@item.Suburb.SuburbName</span>
+			
+		</p>
+
+		<hr>
+
+		
+		}
+}

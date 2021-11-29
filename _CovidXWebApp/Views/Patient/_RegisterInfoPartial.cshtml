@@ -1,0 +1,149 @@
+﻿
+<!--Patient Profile Inputs Start-->
+<!--First Name-->
+<!--<span asp-validation-for="FirstName" class="text-danger"></span>
+<div class="input-group mb-3">
+	<input asp-for="FirstName" type="text" class="form-control" placeholder="First Name">
+	<div class="input-group-append">
+		<div class="input-group-text">
+			<span class="fas fa-user"></span>
+		</div>
+
+	</div>
+
+</div>-->
+
+<!--Last Name-->
+<!--<span asp-validation-for="LastName" class="text-danger" style="display:inline"></span>
+<div class="input-group mb-3">
+	<input asp-for="LastName" type="text" class="form-control" placeholder="Last Name">
+	<div class="input-group-append">
+		<div class="input-group-text">
+			<span class="fas fa-user"></span>
+		</div>
+
+	</div>
+
+</div>-->
+
+<!--ID Number-->
+<!--<span asp-validation-for="Idnumber" class="text-danger"></span>
+<div class="input-group mb-3">
+	<input asp-for="Idnumber" type="text" class="form-control" placeholder="ID Number">
+	<div class="input-group-append">
+		<div class="input-group-text">
+			<span class="fas fa-user"></span>
+		</div>
+	</div>
+
+</div>-->
+
+<!-- DATE INPUT MASK START -->
+
+
+<!--<div class="input-group mb-3">-->
+	<!-- ICON -->
+	<!-- INPUT -->
+	<!--<input asp-for="DateOfBirth"
+		   type="date"
+		   class="form-control"
+		   data-inputmask-alias="datetime"
+		   data-inputmask-inputformat="dd/mm/yyyy" data-mask>-->
+
+	<!-- VALIDATION MESSAGE -->
+	<!--<span asp-validation-for="DateOfBirth" />
+</div>-->
+
+<!-- DATE INPUT MASK END -->
+<!--Phone Number-->
+<!--<span asp-validation-for="MobileNumber" class="text-danger"></span>
+<div class="input-group mb-3">
+	<input asp-for="MobileNumber" type="text" class="form-control" placeholder="Phone Number">
+	<div class="input-group-append">
+		<div class="input-group-text">
+			<span class="fas fa-phone-square"></span>
+		</div>
+	</div>
+
+</div>-->
+<!--Address-->
+<!--<span asp-validation-for="AddressLine1" class="text-danger"></span>
+<div class="input-group mb-3">
+	<input asp-for="AddressLine1" type="text" class="form-control" placeholder="Address 1">
+	<div class="input-group-append">
+		<div class="input-group-text">
+		</div>
+	</div>
+
+</div>
+
+
+<span asp-validation-for="AddressLine2" class="text-danger"></span>
+<div class="input-group mb-3">
+	<input asp-for="AddressLine2" type="text" class="form-control" placeholder="Address 2">
+	<div class="input-group-append">
+		<div class="input-group-text">
+		</div>
+	</div>
+
+</div>-->
+@*Suburb Drop Down
+	INPUT VALIDATION MESSAGE*@
+<!--<span asp-validation-for="SuburbID"
+	  class="text-danger"></span>-->
+@*SELECT INPUT START*@
+@*<div class="input-group mb-3">
+
+	<select asp-for="SuburbID"
+			class="form-control"
+			data-width="100%"
+			data-live-search="true"
+			title="Select Suburb">
+		<option>--Select a suburb--</option>
+		<partial name="_SelectOptionPartial" model="Model.SuburbItems" />
+	</select>
+
+
+</div>
+<input type="hidden" name="SuburbID" id="@Model.SuburbID" />-->*@
+<!--Patient Profile Inputs Start-->
+<!--Email-->
+<!-- INPUT VALIDATION MESSAGE -->
+<!--<span asp-validation-for="Email" class="text-danger"></span>
+<div class="input-group mb-3">
+	<input asp-for="Email" type="email" class="form-control" placeholder="Email">
+	<div class="input-group-append">
+		<div class="input-group-text">
+			<span class="fas fa-envelope"></span>
+		</div>
+	</div>
+
+</div>-->
+
+
+
+<!-- Password -->
+<!-- INPUT VALIDATION MESSAGE -->
+<!--<span asp-validation-for="Password" class="text-danger"></span>
+
+<div class="input-group mb-3">
+	<input asp-for="Password" type="password" class="form-control" placeholder="Password">
+	<div class="input-group-append">
+		<div class="input-group-text">
+			<span class="fas fa-lock"></span>
+		</div>
+	</div>
+
+</div>-->
+
+<!-- INPUT LABEL -->
+<!-- INPUT VALIDATION MESSAGE -->
+<!--<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+<div class="input-group mb-3">
+	<input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Retype password">
+	<div class="input-group-append">
+		<div class="input-group-text">
+			<span class="fas fa-lock"></span>
+		</div>
+	</div>
+</div>-->

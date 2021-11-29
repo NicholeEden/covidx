@@ -1,0 +1,151 @@
+﻿@model NurseSuburbsModel
+@inject INurseService _nurseService
+@inject UserManager<CovidXUser> _usermanager
+@{
+	Layout = "~/Views/Shared/CovidXAdminLte/_Layout.cshtml";
+	ViewData["Title"] = "Nurse Profile";
+}
+
+@{
+	var user = _usermanager.FindByNameAsync(User.Identity.Name).Result;
+	var nurse = _nurseService.FindNurseByUserID(user.Id);
+
+}
+
+<!-- PAGE HEADER -->
+<partial name="Header/_viewPartial" />
+
+@section Scripts{
+	<script>
+		$(function () {
+
+			$('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+
+			$('[data-mask]').inputmask()
+		})
+	</script>
+}
+
+
+<div class="row">
+	<div class="col-md-3">
+		<!-- Profile Image -->
+		<div class="card card-lightblue card-outline">
+			<div class="card-body box-profile">
+				<div class="text-center">
+					<img src="~/img/nurseavatar.png"
+						 alt="User profile picture" class="profile-user-img img-fluid img-circle">
+				</div>
+
+				<h3 class="profile-username text-center">@nurse.FirstName @nurse.LastName </h3>
+
+				<p class="text-muted text-center">@nurse.Rank</p>
+
+				<ul class="list-group list-group-unbordered mb-3">
+					<li class="list-group-item">
+						<b>ID</b> <a class="float-right">@nurse.Idnumber</a>
+					</li>
+					<li class="list-group-item">
+						<b>Mobile Number</b> <a class="float-right">@nurse.MobileNumber</a>
+					</li>
+					<li class="list-group-item">
+						<b>Email Address</b> <a class="float-right">@User.Identity.Name</a>
+					</li>
+					<li class="list-group-item">
+						<b>Year qualified</b> <a class="float-right">@nurse.YearQualified.ToShortDateString()</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+
+		<div class="card card-lightblue">
+			<div class="card-header">
+				<h3 class="card-title">Favourite Suburbs</h3>
+			</div>
+			<!-- /.card-header -->
+			<div class="card-body">
+				<!--Partial View for Suburbs Preferred Info-->
+				<partial name="Datatable/_FavouriteSuburbs" />
+
+			</div>
+			<!-- /.card-body -->
+		</div>
+		<!-- /.card -->
+	</div>
+		<div class="col-md-9">
+			<form asp-controller="Nurse"
+				  asp-action="PickSuburbs"
+				  class="col-md-9 form-horizontal">
+				<div class="card card-lightblue">
+					<!-- CARD HEADER START -->
+					<div class="card-header">
+						<h3 class="card-title">Pick Favourite Suburbs</h3>
+						<!-- CARD TOOLS START -->
+						<div class="card-tools">
+							<!-- ADD CARD TOOLS HERE -->
+							<!-- This will cause the card to close when clicked -->
+							<!--<partial name="Card/Tools/_removePartial.cshtml" />-->
+
+							<!-- This will cause the card to maximize when clicked -->
+							<!--<partial name="Card/Tools/_maximizePartial.cshtml" />-->
+							<!-- This will cause the card to minimize when clicked -->
+							<!--<partial name="Card/Tools/_collapsePartial.cshtml" />-->
+
+						</div>
+						<!-- CARD TOOLS END -->
+					</div>
+					<!-- CARD HEADER END -->
+					<!-- CARD BODY START -->
+					<div class="card-body">
+						<!-- ADD CONTENT HERE -->
+						
+						<!--Dependents -->
+						<div class="form-group row">
+							<label asp-for="SelectedSuburbsIds" class="text-muted col-sm-2 col-form-label">Select favourite suburb(s)</label>
+
+							<div class="col-sm-10">
+								<select asp-for="SelectedSuburbsIds"
+										asp-items="_nurseService.GetSuburbList()"
+										class="selectpicker"
+										data-width="100%"
+										data-live-search="true"
+										multiple
+										data-max-options="5"
+										title="Select suburbs(s)">
+								</select>
+								<span asp-validation-for="SelectedSuburbsIds" style="display:inline" />
+							</div>
+						</div>
+
+					</div>
+					<!-- CARD BODY END -->
+					<!-- CARD FOOTER START -->
+					<div class="card-footer">
+						<!-- ADD BUTTONS HERE -->
+						<button type="submit"
+								class="btn btn-outline-primary">
+							Save
+						</button>
+						<a asp-action="Index"
+						   asp-controller="Home"
+						   class="btn btn-outline-secondary float-right">
+							Cancel
+						</a>
+					</div>
+					<!-- CARD FOOTER END -->
+				</div>
+			</form>
+		</div>
+
+		
+
+	</div>
+
+
+
+
+
+
+
+

@@ -1,0 +1,392 @@
+﻿
+@inject IPatientService _patientService
+@inject INurseService _nurseService
+@inject UserManager<CovidXUser> _usermanager
+@{
+	var user = _usermanager.FindByNameAsync(User.Identity.Name).Result;
+	var patient = _patientService.GetPatientDetail(user.Id);
+	var nurse = _nurseService.FindNurseByUserID(user.Id);
+
+	//var testDetails = _patientService.GetTestDetail(user.Id);
+
+	//var testDetails = _patientService.GetTestInfo(user.Id);
+
+}
+
+
+<aside class="main-sidebar sidebar-light-danger elevation-4">
+	<a href="#"
+	   class="brand-link">
+		<img src="~/img/CovidIcon.svg" alt="CovidX Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+		<span class="brand-text font-weight-bold ">CovidXTests</span>
+	</a>
+	<div class="sidebar">
+
+		<div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
+			@if (User.IsInRole("Patient"))
+
+			{
+
+				@if (patient is not null)
+				{
+					@if (patient.Gender == CovidEnums.Gender.Female)
+					{
+						<div class="image">
+							<img src="~/img/patientFemale.png" class="img-circle elevation-2" alt="User Image">
+						</div>
+					}
+					else if (patient.Gender == CovidEnums.Gender.Male)
+					{
+						<div class="image">
+							<img src="~/img/patientMale.png" class="img-circle elevation-2" alt="User Image">
+						</div>
+					}
+					else
+					{
+						<div class="image">
+							<img src="~/img/Patient1.png" class="img-circle elevation-2" alt="User Image">
+						</div>
+					}
+
+				}
+				else
+				{
+					<div class="image">
+						<img src="~/img/Patient1.png" class="img-circle elevation-2" alt="User Image">
+					</div>
+				}
+
+				if (patient is not null)
+				{
+					<div class="info">
+						<a href="#" class="d-block">@patient.FirstName @patient.LastName</a>
+					</div>
+
+				}
+				else
+				{
+					<div class="info">
+						<a href="#" class="d-block">@User.Identity.Name</a>
+					</div>
+				}
+			}
+			else if (User.IsInRole("Nurse"))
+			{
+				<div class="image">
+					<img src="~/img/nurseavatar.png" class="img-circle elevation-2" alt="User Image">
+				</div>
+				@if (nurse is not null)
+				{
+					<div class="info">
+						<a href="#" class="d-block">@nurse.FirstName @nurse.LastName</a>
+					</div>
+				}
+				else
+				{
+					<div class="info">
+						<a href="#" class="d-block">@User.Identity.Name</a>
+					</div>
+				}
+			}
+			else if (User.IsInRole("LabUser"))
+			{
+				<div class="image">
+					<img src="~/img/avatar04.png" class="img-circle elevation-2" alt="User Image">
+				</div>
+				<div class="info">
+					<a href="#" class="d-block">@User.Identity.Name</a>
+				</div>
+			}
+			else if (User.IsInRole("Manager"))
+			{
+				<div class="image">
+					<img src="~/img/avatar2.png" class="img-circle elevation-2" alt="User Image">
+				</div>
+				<div class="info">
+					<a href="#" class="d-block">@User.Identity.Name</a>
+				</div>
+			}
+		</div>
+		<!--NAVIGATION LINKS FOR CONTROLLER METHODS-->
+		<nav class="mt-2">
+
+			@if (User.Identity.IsAuthenticated)
+			{
+			<ul class="nav nav-pills nav-sidebar  flex-column"
+				data-widget="treeview" role="menu" data-accordion="false">
+				<li class="nav-item has-treeview ">
+
+					<!--Nurse-->
+					<!-- LEVEL 1 OPTION START -->
+
+					@if (User.IsInRole("Nurse") )
+					{
+						<a href="#" class="nav-link">
+							<i class="nav-icon fas fa-edit nav-icon"></i>
+							<p>
+								Nurse
+								<i class="right fas fa-angle-left"></i>
+							</p>
+						</a>
+						<!-- LEVEL 1 OPTION END -->
+						<!-- LEVEL 2 CONTAINER START -->
+
+						<ul class="nav nav-treeview ml-1">
+							<!-- LEVEL 2 OPTION START -->
+
+							<li class="nav-item">
+								<a asp-controller="Nurse" asp-action="CreateNurseProfile" class="nav-link">
+
+									<i class="nav-icon fas fa-user-plus"></i>
+									<p>Create Profile</p>
+								</a>
+							</li>
+							@if (nurse is null)
+							{
+								//Only show Create Profile
+							}
+							else
+							{
+								<li class="nav-item">
+									<a asp-controller="Nurse" asp-action="ViewNurseProfile" class="nav-link">
+
+										<i class="far fa-address-card nav-icon"></i>
+										<p>View Profile</p>
+									</a>
+								</li>
+								<li class="nav-item">
+
+									<a asp-controller="Calender" asp-action="Index" class="nav-link">
+
+										<i class="far fa-calendar nav-icon"></i>
+										<p>View My Schedule</p>
+									</a>
+								</li>
+
+
+								@*<li class="nav-item">
+									<a asp-controller="Nurse" asp-action="ScheduledRequests" class="nav-link">
+
+										<i class="far fa-calendar-check nav-icon"></i>
+										<p>View Scheduled Requests</p>
+									</a>
+								</li>*@
+							}
+							<!-- LEVEL 2 OPTION END -->
+						</ul>
+						<!-- LEVEL 2 CONTAINER END -->
+
+					}
+				</li>
+
+				<!--Nurse Test Requests-->
+
+				<li class="nav-item has-treeview ">
+
+					<!--Nurse-->
+					<!-- LEVEL 1 OPTION START -->
+
+					@if (User.IsInRole("Nurse"))
+					{
+						<a href="#" class="nav-link">
+							<i class="nav-icon fas fa-edit nav-icon"></i>
+							<p>
+								Test Requests
+								<i class="right fas fa-angle-left"></i>
+							</p>
+						</a>
+						<!-- LEVEL 1 OPTION END -->
+						<!-- LEVEL 2 CONTAINER START -->
+
+				<ul class="nav nav-treeview ml-1">
+					<!-- LEVEL 2 OPTION START -->
+					@if (nurse is not null)
+					{ 
+					<li class="nav-item">
+
+						<a asp-controller="Nurse" asp-action="ScheduledRequests" class="nav-link">
+
+							<i class="far fa-calendar-check nav-icon"></i>
+							<p>View Scheduled</p>
+						</a>
+					</li>
+						<li class="nav-item">
+							<a asp-controller="Nurse" asp-action="ViewAllRequests" class="nav-link">
+
+								<i class="nav-icon fas fa-file"></i>
+								<p>View All</p>
+							</a>
+						</li>
+
+					
+					
+					
+					<li class="nav-item">
+						<a asp-controller="Nurse" asp-action="ViewAssigned" class="nav-link">
+
+							<i class="nav-icon fas fa-file-invoice"></i>
+							<p>View Assigned</p>
+						</a>
+					</li>
+
+
+					<li class="nav-item">
+						<a asp-controller="Nurse" asp-action="" class="nav-link">
+
+							<i class="nav-icon fas fa-file-invoice"></i>
+							<p>View Performed</p>
+						</a>
+					</li>
+					}
+					
+					<!-- LEVEL 2 OPTION END -->
+				</ul>
+						<!-- LEVEL 2 CONTAINER END -->
+
+					}
+				</li>
+
+
+
+
+
+
+
+
+
+				<!-- LEVEL 1 & 2 CONTAINER END -->
+				<!--Main Member-->
+				<li class="nav-item has-treeview ">
+
+					<!--Nurse-->
+					<!-- LEVEL 1 OPTION START -->
+
+					@if (User.IsInRole("Patient"))
+					{
+						<a href="#" class="nav-link">
+							<i class="nav-icon fas fa-edit nav-icon"></i>
+							<p>
+								Patient
+								<i class="right fas fa-angle-left"></i>
+							</p>
+						</a>
+						<!-- LEVEL 1 OPTION END -->
+						<!-- LEVEL 2 CONTAINER START -->
+
+						<ul class="nav nav-treeview ml-1">
+							<!-- LEVEL 2 OPTION START -->
+
+							<li class="nav-item">
+								<a asp-controller="Patient" asp-action="CreateProfile" class="nav-link">
+
+									<i class="nav-icon fas fa-user-plus"></i>
+									<p>Create Profile</p>
+								</a>
+							</li>
+
+							@if (patient is null)
+							{
+								//Only show Create Profile
+							}
+							else
+							{
+
+
+								<li class="nav-item">
+									<a asp-controller="Patient" asp-action="ViewPatientProfile" class="nav-link">
+
+										<i class="far fa-address-card nav-icon"></i>
+										<p>View Profile</p>
+									</a>
+								</li>
+								@*<li class="nav-item">
+							<a asp-controller="Patient" asp-action="UpdateProfile" class="nav-link">
+
+								<i class="far fa-address-card nav-icon"></i>
+								<p>Edit Profile</p>
+							</a>
+						</li>*@
+								<li class="nav-item">
+									<a asp-controller="Patient" asp-action="RegisterDependent" class="nav-link">
+
+										<i class="nav-icon fas fa-users nav-icon"></i>
+										<p>Register Dependent</p>
+									</a>
+								</li>
+								<li class="nav-item">
+
+									<a asp-controller="Patient" asp-action="RequestTest" class="nav-link">
+
+										<i class="nav-icon fas fa-file-medical-alt"></i>
+										<p>Request a Test</p>
+									</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link">
+										<i class="far fa-circle nav-icon"></i>
+										<p>View Test Request Details</p>
+									</a>
+								</li>
+							}
+							<!-- LEVEL 2 OPTION END -->
+						</ul>
+						<!-- LEVEL 2 CONTAINER END -->
+
+					}
+				</li>
+				<!--Manager-->
+				<li class="nav-item has-treeview ">
+
+					<!--Nurse-->
+					<!-- LEVEL 1 OPTION START -->
+
+					@if (User.IsInRole("Manager"))
+					{
+						<a href="#" class="nav-link">
+							<i class="nav-icon fas fa-edit nav-icon"></i>
+							<p>
+								Manager
+								<i class="right fas fa-angle-left"></i>
+							</p>
+						</a>
+						<!-- LEVEL 1 OPTION END -->
+						<!-- LEVEL 2 CONTAINER START -->
+
+						<ul class="nav nav-treeview ml-1">
+							<!-- LEVEL 2 OPTION START -->
+							
+							<li class="nav-item">
+								<a asp-controller="Manager" asp-action="Reports" class="nav-link">
+
+									<i class="nav-icon fab fa-wpforms"></i>
+									<p>Generate report</p>
+								</a>
+							</li>
+							<li class="nav-item">
+
+								<a asp-controller="Account" asp-action="RegisterNurse" class="nav-link">
+
+									<i class="nav-icon fas fa-user-nurse"></i>
+									<p>Register Nurse Account</p>
+								</a>
+
+							</li>
+							@*<li class="nav-item">
+								<a class="nav-link">
+									<i class="far fa-circle nav-icon"></i>
+									<p>View Test Request Details</p>
+								</a>
+							</li>*@
+							<!-- LEVEL 2 OPTION END -->
+						</ul>
+						<!-- LEVEL 2 CONTAINER END -->
+
+					}
+				</li>
+			</ul>
+
+			}
+		</nav>
+	</div>
+</aside>

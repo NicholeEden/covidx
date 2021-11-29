@@ -1,0 +1,162 @@
+﻿
+@inject ITestRequestService _testRequestService
+@inject INurseService _nurseService
+
+@{ 
+	var Newcounter = _testRequestService.GetTestRequestsByStatus(CovidEnums.TestRequestStatus.New);
+	var ScheduledCounter = _testRequestService.GetTestRequestsByStatus(CovidEnums.TestRequestStatus.Scheduled);
+	var PerformedCounter = _testRequestService.GetTestRequestsByStatus(CovidEnums.TestRequestStatus.Performed);
+
+	var nurses = _nurseService.GetNurses();
+
+	var positiveCounter = _testRequestService.GetTestsByStatus("Positive");
+	var negativeCounter = _testRequestService.GetTestsByStatus("Negative");
+
+	var mainMemberCounter = _testRequestService.GetMainMembers();
+}
+
+
+<div class="content">
+	<div class="container-fluid">
+
+		<div class="row justify-content-center">
+			<!-- ADD CARD HERE -->
+			<!-- ADMISSION -->
+			<div class="card col-md-9 mx-1">
+				<div class="card-header border-0">
+					<h3 class="card-title">CovidX Testing Overview</h3>
+				</div>
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+						<p class="text-info text-xl">
+							<i class="fas fa-user-clock"></i>
+						</p>
+
+
+						@if (Newcounter is not null)
+						{
+
+
+							<p class="d-flex flex-column text-right">
+								<span class="font-weight-bold text-xl">
+									@Newcounter.Count()
+								</span>
+
+								<span class="text-muted">NEW TEST REQUESTS</span>
+							</p>
+						}
+					</div>
+					<!-- /.d-flex -->
+					<div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+						<p class="text-info text-xl">
+							<i class="fas fa-procedures"></i>
+						</p>
+						@if (ScheduledCounter is not null)
+						{
+							<p class="d-flex flex-column text-right">
+								<span class="font-weight-bold text-xl">
+									@ScheduledCounter.Count()
+								</span>
+								<span class="text-muted">SCHEDULED TEST REQUESTS</span>
+							</p>
+						}
+					</div>
+					<!-- /.d-flex -->
+
+					<div class="d-flex justify-content-between align-items-center border-bottom mb-3">
+						<p class="text-info text-xl">
+							<i class="fas fa-procedures"></i>
+						</p>
+						@if (PerformedCounter is not null)
+						{
+							<p class="d-flex flex-column text-right">
+								<span class="font-weight-bold text-xl">
+									@PerformedCounter.Count()
+								</span>
+								<span class="text-muted">TESTS PERFORMED</span>
+							</p>
+						}
+					</div>
+					<!-- /.d-flex -->
+					<div class="d-flex justify-content-between align-items-center mb-0">
+						<p class="text-info text-xl">
+							<i class="fas fa-user-nurse"></i>
+						</p>
+						@if (nurses is not null)
+						{
+							<p class="d-flex flex-column text-right">
+								<span class="font-weight-bold text-xl">
+									@nurses.Count()
+								</span>
+								<span class="text-muted">NUMBER OF NURSES</span>
+							</p>
+						}
+					</div>
+					<!-- /.d-flex -->
+
+				</div>
+			</div>
+		</div>
+
+		<div class="row justify-content-center">
+
+			<div class="col-lg-3 col-5">
+
+
+
+
+
+				<!-- small card -->
+				<div class="small-box bg-gradient-info">
+					@if (positiveCounter is not null)
+					{
+						<div class="inner">
+							<h3>@positiveCounter.Count()</h3>
+
+							<p>POSITIVE TESTS</p>
+						</div>
+						<div class="icon">
+							<i class="fas fa-temperature-high"></i>
+						</div>
+						
+					}
+					</div>
+					
+			</div>
+
+			<div class="col-lg-3 col-5">
+				<!-- small card -->
+				<div class="small-box bg-gradient-info">
+					@if (negativeCounter is not null)
+					{
+						<div class="inner">
+							<h3>@negativeCounter.Count()</h3>
+
+							<p>NEGATIVE TESTS</p>
+						</div>
+						<div class="icon">
+							<i class="fas  fa-temperature-low"></i>
+						</div>
+						
+					}
+					</div>
+			</div>
+
+			<div class="col-lg-3 col-5">
+			
+				<div class="small-box bg-gradient-info">
+					<div class="inner">
+						<h3>@mainMemberCounter.Count()</h3>
+
+						<p>Active Main Members</p>
+					</div>
+					<div class="icon">
+						<i class="fas fa-users"></i>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
